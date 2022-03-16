@@ -152,20 +152,16 @@ def parse_args():
                         help='warm up the training',
                         default=400, type=int)
     parser.add_argument('--pseudo_gt_boxes_pre_path', dest='pseudo_gt_boxes_pre_path',
-                        help='directory to save images index',
-                        default="./faster-rcnn-incremental-non-overlaps.pytorch/pseudo_gt_boxes_pre_path_.npy",
+                        default="",
                         type=str)
     parser.add_argument('--pseudo_gt_boxes_cur_path', dest='pseudo_gt_boxes_cur_path',
-                        help='directory to save images index',
-                        default="./faster-rcnn-incremental-non-overlaps.pytorch/pseudo_gt_boxes_cur_path_.npy",
+                        default="",
                         type=str)
     parser.add_argument('--pseudo_gt_boxes_num_path', dest='pseudo_gt_boxes_num_path',
-                        help='directory to save images index',
-                        default="./faster-rcnn-incremental-non-overlaps.pytorch/pseudo_gt_boxes_num_path_.npy",
+                        default="",
                         type=str)
     parser.add_argument('--img_id_path', dest='img_id_path',
-                        help='directory to save images index',
-                        default="./faster-rcnn-incremental-non-overlaps.pytorch/img_id_path_.npy",
+                        default="",
                         type=str)
     args = parser.parse_args()
     return args
@@ -327,14 +323,14 @@ if __name__ == '__main__':
 
     # previous model
     fasterRCNN_pre.create_architecture()
-    supervisor_path = "/home/zhangc/PycharmProjects/faster-rcnn-incremental-non-overlaps.pytorch/models_pre/res50/pascal_voc/faster_rcnn_1_20_6003.pth"
+    supervisor_path = "./"
     print("load checkpoint %s" % (supervisor_path))
     checkpoint = torch.load(supervisor_path)
     fasterRCNN_pre.load_state_dict(checkpoint['model'])
 
     # current model
     fasterRCNN_cur.create_architecture()
-    supervisor_path = "/home/zhangc/PycharmProjects/faster-rcnn-incremental-non-overlaps.pytorch/models_pre/res50/pascal_voc/faster_rcnn_1_20_6679.pth"
+    supervisor_path = "./"
     print("load checkpoint %s" % (supervisor_path))
     checkpoint = torch.load(supervisor_path)
     fasterRCNN_cur.load_state_dict(checkpoint['model'])
