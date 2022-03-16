@@ -20,10 +20,10 @@ def convert(size, box):
     return (x, y, w, h)
 
 
-json_file = "/home/zhangc/PycharmProjects/faster-rcnn-incremental-non-overlaps.pytorch/data/coco/annotations/instances_train2014.json"
+json_file = "./coco/annotations/instances_train2014.json"
 
 data = json.load(open(json_file, 'r'))
-ana_txt_save_path = "/home/zhangc/PycharmProjects/faster-rcnn-incremental-non-overlaps.pytorch/data/coco/train2014"
+ana_txt_save_path = "./coco/train2014"
 if not os.path.exists(ana_txt_save_path):
     os.makedirs(ana_txt_save_path)
 
@@ -48,7 +48,7 @@ for img in data['images']:
             f_txt.write("%s %s %s %s %s\n" % (cat_id_map[ann['category_id']], box[0], box[1], box[2], box[3]))
 
     f_txt.close()
-fileObject = open("/home/zhangc/PycharmProjects/faster-rcnn-incremental-non-overlaps.pytorch/data/coco/train_cat_id_map.txt", 'w')  # 类别进行重新映射
+fileObject = open("./coco/train_cat_id_map.txt", 'w')
 for cat_id in cat_id_map:
     fileObject.write(str(cat_id))
     fileObject.write('\n')
