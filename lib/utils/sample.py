@@ -123,20 +123,16 @@ def parse_args():
                         help='open',
                         default=False, type=bool)
     parser.add_argument('--pseudo_gt_boxes_pre_path', dest='pseudo_gt_boxes_pre_path',
-                        help='directory to save images index',
-                        default="/home/zhangc/PycharmProjects/faster-rcnn-incremental-non-overlaps.pytorch/pseudo_gt_boxes_pre_path.npy",
+                        default="",
                         type=str)
     parser.add_argument('--pseudo_gt_boxes_cur_path', dest='pseudo_gt_boxes_cur_path',
-                        help='directory to save images index',
-                        default="/home/zhangc/PycharmProjects/faster-rcnn-incremental-non-overlaps.pytorch/pseudo_gt_boxes_cur_path.npy",
+                        default="",
                         type=str)
     parser.add_argument('--pseudo_gt_boxes_num_path', dest='pseudo_gt_boxes_num_path',
-                        help='directory to save images index',
-                        default="/home/zhangc/PycharmProjects/faster-rcnn-incremental-non-overlaps.pytorch/pseudo_gt_boxes_num_path.npy",
+                        default="",
                         type=str)
     parser.add_argument('--img_id_path', dest='img_id_path',
-                        help='directory to save images index',
-                        default="/home/zhangc/PycharmProjects/faster-rcnn-incremental-non-overlaps.pytorch/img_id_path.npy",
+                        default="",
                         type=str)
     args = parser.parse_args()
     return args
@@ -181,8 +177,8 @@ if __name__ == '__main__':
         args.imdbval_name = "vg_150-50-50_minival"
         args.set_cfgs = ['ANCHOR_SCALES', '[4, 8, 16, 32]', 'ANCHOR_RATIOS', '[0.5,1,2]']
 
-    args.cfg_file = "/home/zhangc/PycharmProjects/faster-rcnn-incremental-non-overlaps.pytorch/cfgs/{}_ls.yml".format(
-        args.net) if args.large_scale else "/home/zhangc/PycharmProjects/faster-rcnn-incremental-non-overlaps.pytorch/cfgs/{}.yml".format(
+    args.cfg_file = "./cfgs/{}_ls.yml".format(
+        args.net) if args.large_scale else "./cfgs/{}.yml".format(
         args.net)
 
     if args.cfg_file is not None:
@@ -282,8 +278,8 @@ if __name__ == '__main__':
     data_iter = iter(dataloader)
 
     sample_pseudo_gt_boxes = sample_pseudo_gt_boxes(args)
-    per_class_threshold_pre = [0, 0.7, 0.7, 0.7, 0.6, 0.8, 0.8, 0.8, 0.5, 0.8, 0.6, 0.8, 0.8, 0.7, 0.7, 0.4, 0.7, 0.6, 0.8, 0.7]
-    per_class_threshold_cur = [0, 0.5]
+    per_class_threshold_pre = []
+    per_class_threshold_cur = []
     img_selected = []
     gt_boxes_pre_selected = []
     gt_boxes_cur_selected = []
