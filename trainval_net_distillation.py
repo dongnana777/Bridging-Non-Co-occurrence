@@ -254,7 +254,7 @@ if __name__ == '__main__':
     classes = [imdb.classes[i] for i in labels]
 
     # sampling coco as unlabeled data
-    labels_un = [5, 2, 16, 9, 44, 6, 3, 17, 62, 21, 67, 18, 19, 4, 1, 64, 20, 63, 7, 72]
+    labels_un = [5, 2, 15, 9, 40, 6, 3, 16, 57, 20, 61, 17, 18, 4, 1, 59, 19, 58, 7, 63]
     labels_old_un = [0]
     img_selected = np.load(args.img_id_path, allow_pickle=True)
     gt_boxes_pre = np.load(args.pseudo_gt_boxes_pre_path, allow_pickle=True)
