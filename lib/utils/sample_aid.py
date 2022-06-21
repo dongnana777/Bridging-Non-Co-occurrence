@@ -330,13 +330,13 @@ class sample_pseudo_gt_boxes(nn.Module):
                     all_boxes_scaling_per_class = []
                     for j in range(len(all_boxes_)):
                         if all_boxes_[j][:1, 4] == cat:
-                            all_boxes_per_class = all_boxes_[j]
+                            all_boxes_per_class.append(all_boxes_[j])
                     for j in range(len(all_boxes_flip_)):
                         if all_boxes_flip_[j][:1, 4] == cat:
-                            all_boxes_flip_per_class = flip_box(all_boxes_flip_[j], img_flip.size(3), img_flip.size(2), 1)
+                            all_boxes_flip_per_class.append(flip_box(all_boxes_flip_[j], img_flip.size(3), img_flip.size(2), 1))
                     for j in range(len(all_boxes_scaling_)):
                         if all_boxes_scaling_[j][:1, 4] == cat:
-                            all_boxes_scaling_per_class = resize_box(all_boxes_scaling_[j], fx=float(1 / 0.7), fy=float(1 / 0.7))
+                            all_boxes_scaling_per_class.append(resize_box(all_boxes_scaling_[j], fx=float(1 / 0.7), fy=float(1 / 0.7)))
 
                     if len(all_boxes_per_class) >0 and len(all_boxes_flip_per_class) >0 and len(all_boxes_scaling_per_class) >0 :
                         voted_boxes_per_class = torch.cat((all_boxes_per_class, all_boxes_flip_per_class, all_boxes_scaling_per_class), 0)
