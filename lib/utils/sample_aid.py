@@ -297,30 +297,10 @@ class sample_pseudo_gt_boxes(nn.Module):
             for j in range(len(all_boxes_scaling)):
                     category_scaling.append(all_boxes_scaling[j][:1, 4])
             # select category
-            category_selected_ = category_ori
-            for i in category_flip:
-                if i not in category_ori:
-                    category_selected_.append(i)
-            category_selected = category_selected_
-            for i in category_scaling:
-                if i not in category_selected_:
-                    category_selected.append(i)
-            # print(category_selected)
+            category_selected = category_ori + category_flip + category_scaling
+            category_selected = list(set(category_selected))
             # select boxes
             if len(category_selected) > 0:
-                all_boxes_ = []
-                all_boxes_flip_ = []
-                all_boxes_scaling_ = []
-
-                for i in range(len(all_boxes)):
-                    if all_boxes[i][:1, 4] in category_selected:
-                            all_boxes_.append(all_boxes[i])
-                for i in range(len(all_boxes_flip)):
-                    if all_boxes_flip[i][:1, 4] in category_selected:
-                            all_boxes_flip_.append(all_boxes_flip[i])
-                for i in range(len(all_boxes_scaling)):
-                    if all_boxes_scaling[i][:1, 4] in category_selected:
-                            all_boxes_scaling_.append(all_boxes_scaling[i])
 
                 # boxes voting
                 voted_boxes = []
@@ -328,35 +308,23 @@ class sample_pseudo_gt_boxes(nn.Module):
                     all_boxes_per_class = []
                     all_boxes_flip_per_class = []
                     all_boxes_scaling_per_class = []
-                    for j in range(len(all_boxes_)):
-                        if all_boxes_[j][:1, 4] == cat:
-                            all_boxes_per_class.append(all_boxes_[j])
-                    for j in range(len(all_boxes_flip_)):
-                        if all_boxes_flip_[j][:1, 4] == cat:
-                            all_boxes_flip_per_class.append(flip_box(all_boxes_flip_[j], img_flip.size(3), img_flip.size(2), 1))
-                    for j in range(len(all_boxes_scaling_)):
-                        if all_boxes_scaling_[j][:1, 4] == cat:
-                            all_boxes_scaling_per_class.append(resize_box(all_boxes_scaling_[j], fx=float(1 / 0.7), fy=float(1 / 0.7)))
+                    for j in range(len(all_boxes)):
+                        if all_boxes[j][:1, 4] == cat:
+                            all_boxes_per_class.append(all_boxes[j])
+                    for j in range(len(all_boxes_flip)):
+                        if all_boxes_flip[j][:1, 4] == cat:
+                            all_boxes_flip_per_class.append(flip_box(all_boxes_flip[j], img_flip.size(3), img_flip.size(2), 1))
+                    for j in range(len(all_boxes_scaling)):
+                        if all_boxes_scaling[j][:1, 4] == cat:
+                            all_boxes_scaling_per_class.append(resize_box(all_boxes_scaling[j], fx=float(1 / 0.7), fy=float(1 / 0.7)))
 
-                    if len(all_boxes_per_class) >0 and len(all_boxes_flip_per_class) >0 and len(all_boxes_scaling_per_class) >0 :
-                        voted_boxes_per_class = torch.cat((all_boxes_per_class, all_boxes_flip_per_class, all_boxes_scaling_per_class), 0)
-                    elif len(all_boxes_per_class) == 0 and len(all_boxes_flip_per_class) >0 and len(all_boxes_scaling_per_class) >0 :
-                        voted_boxes_per_class = torch.cat((all_boxes_flip_per_class, all_boxes_scaling_per_class), 0)
-                    elif len(all_boxes_per_class) >0 and len(all_boxes_flip_per_class) ==0 and len(all_boxes_scaling_per_class) >0 :
-                        voted_boxes_per_class = torch.cat((all_boxes_per_class, all_boxes_scaling_per_class), 0)
-                    elif len(all_boxes_per_class) >0 and len(all_boxes_flip_per_class) >0 and len(all_boxes_scaling_per_class) ==0 :
-                        voted_boxes_per_class = torch.cat((all_boxes_per_class, all_boxes_flip_per_class), 0)
-                    elif len(all_boxes_per_class) ==0 and len(all_boxes_flip_per_class) ==0 and len(all_boxes_scaling_per_class) >0 :
-                        voted_boxes_per_class = all_boxes_scaling_per_class
-                    elif len(all_boxes_per_class) ==0 and len(all_boxes_flip_per_class) >0 and len(all_boxes_scaling_per_class) ==0 :
-                        voted_boxes_per_class = all_boxes_flip_per_class
-                    elif len(all_boxes_per_class) >0 and len(all_boxes_flip_per_class) ==0 and len(all_boxes_scaling_per_class) ==0 :
-                        voted_boxes_per_class = all_boxes_per_class
-                    voted_boxes.append(box_voting(voted_boxes_per_class))
+                    voted_boxes_per_class = all_boxes_per_class + all_boxes_flip_per_class + all_boxes_scaling_per_class
+                    voted_pseudo_gt_per_class = torch.cat([o for o in voted_boxes_per_class], 0)
+                    voted_boxes.append(box_voting(voted_pseudo_gt_per_class))
                 voted_pseudo_gt_boxes = torch.cat([o for o in voted_boxes], 0)
+
                 num_pseudo_gt_boxes = torch.tensor([voted_pseudo_gt_boxes.size(0)])
                 voted_pseudo_gt_boxes = sample_func(self.args)._pad_gt_boxes(voted_pseudo_gt_boxes)
-                # print(voted_pseudo_gt_boxes)
             else:
                 voted_pseudo_gt_boxes = torch.zeros([1,self.args.num_classes, 5], dtype=torch.float).cuda()
                 num_pseudo_gt_boxes = torch.tensor([0])
