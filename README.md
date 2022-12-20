@@ -2,7 +2,7 @@
 
 **About**
 
-This is the source code for our paper
+This is the source code of our paper
 
 Na Dong, Yongqiang, Zhang Mingli Ding, Gim Hee Lee. Bridging Non Co-occurrence with Unlabeled In-the-wild Data for Incremental Object Detection. In Neurips 2021.
 
