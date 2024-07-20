@@ -31,6 +31,14 @@ For more details, please refer to [our paper](http://arxiv.org/abs/2110.15017).
   volume={34},
   year={2021}
 }
+@article{dong2024towards,
+  title={Towards Non Co-occurrence Incremental Object Detection with Unlabeled In-the-Wild Data},
+  author={Dong, Na and Zhang, Yongqiang and Ding, Mingli and Lee, Gim Hee},
+  journal={International Journal of Computer Vision},
+  pages={1--18},
+  year={2024},
+  publisher={Springer}
+}
 ```
 
 **Dependencies**
